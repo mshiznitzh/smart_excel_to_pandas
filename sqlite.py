@@ -1,19 +1,35 @@
 import sqlite3
 from sqlite3 import Error
+import os_tools
 
-
-def create_connection(db_file):
+def create_connection(db_file, dbpath):
     """ create a database connection to the SQLite database
         specified by db_file
     :param db_file: database file
     :return: Connection object or None
     """
+
+    create_table_sql = '''
+    CREATE TABLE [IF NOT EXISTS] [schema_name].table_name (
+	id data_type PRIMARY KEY,
+   	filename data_type varchar,
+	checksum data_type varchar,
+	table_constraints
+    ) [WITHOUT ROWID];
+    '''
+
+    if os_tools.check_for_path(dbpath):
+        os_tools.Change_Working_Path(dbpath)
+
     conn = None
     try:
         conn = sqlite3.connect(db_file)
         return conn
     except Error as e:
         print(e)
+
+    create_table(create_table_sql)
+
 
     return conn
 
@@ -29,7 +45,7 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def create_file_data(conn, project):
+def create_file_data(conn, filename, checksum):
     #TODO Write this function
     """
     Create a new project into the projects table
@@ -40,7 +56,8 @@ def create_file_data(conn, project):
     sql = ''' INSERT INTO projects(name,begin_date,end_date)
               VALUES(?,?,?) '''
     cur = conn.cursor()
-    cur.execute(sql, project)
+    cur.execute(sql, project
+                )
     conn.commit()
     return cur.lastrowid
 
