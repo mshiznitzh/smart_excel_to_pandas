@@ -19,9 +19,10 @@ __license__ = "MIT"
 
 import logging
 import os.path
-import md5
-import os_tools
-import padas_tools
+from Hashtools import md5
+import OStools
+import PandasTools
+import timeit
 
 def Check_for_file_date(filename, date=DT.datetime.today().date()):
     """"""
@@ -31,11 +32,16 @@ def Check_for_file_date(filename, date=DT.datetime.today().date()):
         root.withdraw()
         filename = filedialog.askopenfilename(title=' '.join(['Select file for', filename]))
     return filename
+
 def filename_to_feather(filename):
     # TODO add the rest of the supported excel formats
     filename = filename.str.replace('.xlsx', '.feather')
     filename = filename.str.replace('.xlsm', '.feather')
     return filename
+
+def Convert_df_to_feather(df , filename):
+    filename = filename_to_feather(filename)
+    df.to_feather(filename)
 
 def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None, date=None, sheet=None):
     """
@@ -45,11 +51,11 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
 
     dbfilename = 'check_sum_database.db'
     dbpath = './Excel_to_Pandas_database'
-    Data_path = './Data'
+    Data_path = '../Data'
     feather_path = './Feather/'
     dbconn = create_connection(dbfilename, dbpath)
 
-    os_tools.Change_Working_Path(Data_path)
+    OStools.Change_Working_Path(Data_path)
 
     if CheckforUpdate == True:
         Check_for_file_date(filename, date)
@@ -58,14 +64,14 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
         checksum = md5(filename)
         record = select_file_by_checksum(dbconn, checksum)
 
-    if ~record = None:
+    if ~record == None:
         filename = filename_to_feather(filename)
 
-        try
+        try:
             df = pd.read_feather(str.join(feather_path, filename), columns=None, use_threads=True)
         except:
             logger.error("Error importing file " + filename, exc_info=True)
-    else
+    else:
         try:
             df = pd.read_excel(filename, sheet_name=sheet)
             df.to_feather(str.join(feather_path, filename_to_feather(filename),'_',sheet))
@@ -75,11 +81,36 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
 
     if dbconn:
         dbconn.close()
-    df = padas_tools.Cleanup_Dataframe(df)
+    df = PandasTools.Cleanup_Dataframe(df)
 
     return filename, df, sheet
 
+def read_excel_all(list):
+    for file in xlsx_list:
+        pd.read_excel(file)
 
+def read_feather_all(list):
+    for file in xlsx_list:
+        df = pd.read_excel(file)
+
+def feather_me(list):
+    for file in xlsx_list:
+        df = pd.read_excel(file)
+        Convert_df_to_feather(df, file)
+
+def main():
+    OStools.Change_Working_Path('./DATA')
+    #get all xlsx files in folder
+    xlsx_list = OStools.filesearch('.xlsx')
+
+
+    #Time how long it takes to import all sheets
+    timeit(read_excel_all(xlsx_list))
+    feather_list = feather_me(xlsx_list)
+    timeit(read_feather_all(feather_list))
+    feather_list = OStools.filesearch('.feather')
+    #export to feather
+    # Time how long it takes to import all sheets via feather
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
@@ -89,4 +120,4 @@ if __name__ == "__main__":
     logging.basicConfig(format=FORMAT)
     logger.setLevel(logging.INFO)
 
-    main(filename, check_update=False)
+    main()
