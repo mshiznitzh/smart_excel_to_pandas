@@ -36,6 +36,15 @@ def Change_Working_Path(path):
     else:
         print("Can't change the Current Working Directory because this path doesn't exits")
 
+def Check_for_file_date(filename, date=DT.datetime.today().date()):
+    """"""
+    timestamp = DT.datetime.fromtimestamp(Path(filename).stat().st_mtime)
+    if date != timestamp.date():
+        root = tk.Tk()
+        root.withdraw()
+        filename = filedialog.askopenfilename(title=' '.join(['Select file for', filename]))
+    return filename
+
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.

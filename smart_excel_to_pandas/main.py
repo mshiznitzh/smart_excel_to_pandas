@@ -24,14 +24,7 @@ import OStools
 import PandasTools
 import timeit
 
-def Check_for_file_date(filename, date=DT.datetime.today().date()):
-    """"""
-    timestamp = DT.datetime.fromtimestamp(Path(filename).stat().st_mtime)
-    if date != timestamp.date():
-        root = tk.Tk()
-        root.withdraw()
-        filename = filedialog.askopenfilename(title=' '.join(['Select file for', filename]))
-    return filename
+
 
 def filename_to_feather(filename):
     # TODO add the rest of the supported excel formats
