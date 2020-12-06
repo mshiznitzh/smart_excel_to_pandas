@@ -35,6 +35,11 @@ def Cleanup_Dataframe(df):
 
     return df
 
+def filename_to_feather(filename):
+    # TODO add the rest of the supported excel formats
+    filename = filename.replace('.xlsx', '.feather')
+    filename = filename.replace('.xlsm', '.feather')
+    return filename
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.

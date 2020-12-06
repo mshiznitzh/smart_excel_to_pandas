@@ -1,5 +1,12 @@
 '''This module is home to Mike Howard's tools that use the os module'''
 import os.path
+import datetime as DT
+import logging
+import glob
+import sys
+
+#Setup Logging for Module
+logger = logging.getLogger(__name__)
 
 def check_for_path(path):
     if ~os.path.isdir(path):
@@ -27,14 +34,16 @@ def filesearch(word=""):
 
 def Change_Working_Path(path):
     # Check if New path exists
-    if os.path.exists(path):
+    #if os.path.exists(path):
         # Change the current working Directory
-        try:
-            os.chdir(path)  # Change the working directory
-        except OSError:
-            logger.error("Can't change the Current Working Directory", exc_info = True)
-    else:
-        print("Can't change the Current Working Directory because this path doesn't exits")
+    try:
+        os.chdir(path)  # Change the working directory
+    except OSError:
+        logger.error("Can't change the Current Working Directory, aborting programing", exc_info = True)
+        sys.exit()
+    #else:
+     #   print("Can't change the Current Working Directory because this path doesn't exits")
+
 
 def Check_for_file_date(filename, date=DT.datetime.today().date()):
     """"""

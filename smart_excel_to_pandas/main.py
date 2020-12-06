@@ -20,20 +20,13 @@ __license__ = "MIT"
 import logging
 import os.path
 from Hashtools import md5
-import OStools
-import PandasTools
+import OStools.OStools
+import PandasTools.PandasTools
 import timeit
-
-
-
-def filename_to_feather(filename):
-    # TODO add the rest of the supported excel formats
-    filename = filename.str.replace('.xlsx', '.feather')
-    filename = filename.str.replace('.xlsm', '.feather')
-    return filename
+import pandas as pd
 
 def Convert_df_to_feather(df , filename):
-    filename = filename_to_feather(filename)
+    filename = PandasTools.PandasTools.filename_to_feather(filename)
     df.to_feather(filename)
 
 def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None, date=None, sheet=None):
@@ -79,29 +72,29 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
     return filename, df, sheet
 
 def read_excel_all(list):
-    for file in xlsx_list:
+    for file in list:
         pd.read_excel(file)
 
 def read_feather_all(list):
-    for file in xlsx_list:
+    for file in list:
         df = pd.read_excel(file)
 
 def feather_me(list):
-    for file in xlsx_list:
+    for file in list:
         df = pd.read_excel(file)
         Convert_df_to_feather(df, file)
 
 def main():
-    OStools.Change_Working_Path('./DATA')
+    OStools.OStools.Change_Working_Path('../Data')
     #get all xlsx files in folder
-    xlsx_list = OStools.filesearch('.xlsx')
+    xlsx_list = OStools.OStools.filesearch('.xlsx')
 
 
     #Time how long it takes to import all sheets
-    timeit(read_excel_all(xlsx_list))
+    read_excel_all(xlsx_list)
     feather_list = feather_me(xlsx_list)
-    timeit(read_feather_all(feather_list))
-    feather_list = OStools.filesearch('.feather')
+    read_feather_all(feather_list)
+    feather_list = OStools.OStools.filesearch('.feather')
     #export to feather
     # Time how long it takes to import all sheets via feather
 
