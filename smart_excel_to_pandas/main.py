@@ -26,7 +26,7 @@ import timeit
 import pandas as pd
 
 def Convert_df_to_feather(df , filename):
-    filename = PandasTools.PandasTools.filename_to_feather(filename)
+    filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
     df.to_feather(filename)
 
 def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None, date=None, sheet=None):
@@ -38,7 +38,7 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
     dbfilename = 'check_sum_database.db'
     dbpath = './Excel_to_Pandas_database'
     Data_path = '../Data'
-    feather_path = './Feather/'
+    feather_path = '../Feather/'
     dbconn = create_connection(dbfilename, dbpath)
 
     OStools.Change_Working_Path(Data_path)
@@ -71,30 +71,37 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
 
     return filename, df, sheet
 
-def read_excel_all(list):
-    for file in list:
+def read_excel_all():
+    logger.info('Started Function')
+    for file in OStools.OStools.filesearch('.xlsx'):
         pd.read_excel(file)
 
-def read_feather_all(list):
-    for file in list:
-        df = pd.read_excel(file)
+def read_feather_all():
+    logger.info('Started Function')
+    for file in OStools.OStools.filesearch('.feather'):
+        df = pd.read_feather(file)
 
-def feather_me(list):
-    for file in list:
+def feather_me():
+    logger.info('Started Function')
+    for file in OStools.OStools.filesearch('.xlsx'):
         df = pd.read_excel(file)
         Convert_df_to_feather(df, file)
 
 def main():
+    logger.info('Started Function')
     OStools.OStools.Change_Working_Path('../Data')
     #get all xlsx files in folder
     xlsx_list = OStools.OStools.filesearch('.xlsx')
 
 
     #Time how long it takes to import all sheets
-    read_excel_all(xlsx_list)
-    feather_list = feather_me(xlsx_list)
-    read_feather_all(feather_list)
-    feather_list = OStools.OStools.filesearch('.feather')
+    t = timeit.Timer("read_excel_all()", "from main import read_excel_all")
+    print(t.timeit(1))
+
+    feather_me()
+    t = timeit.Timer("read_feather_all()", "from main import read_feather_all")
+    print(t.timeit(1))
+
     #export to feather
     # Time how long it takes to import all sheets via feather
 
