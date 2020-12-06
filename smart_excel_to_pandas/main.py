@@ -19,11 +19,12 @@ __license__ = "MIT"
 
 import logging
 import os.path
-from Hashtools import md5
+import Hashtools.md5
 import OStools.OStools
 import PandasTools.PandasTools
-import timeit
 import pandas as pd
+import SQLtools.sqlite
+
 
 def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
@@ -39,15 +40,12 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, sheetname=None):
     dbpath = './Excel_to_Pandas_database'
     Data_path = '../Data'
     feather_path = '../Feather/'
-    dbconn = create_connection(dbfilename, dbpath)
+    dbconn = SQLtools.sqlite.create_connection(dbfilename, dbpath)
 
     OStools.OStools.Change_Working_Path(Data_path)
 
-    if CheckforUpdate == True:
-        OStools.OStools.Check_for_file_date(filename, date)
-
     if os.path.exists(filename):
-        checksum = md5(filename)
+        checksum = Hashtools.md5.md5(filename)
         record = select_file_by_checksum(dbconn, checksum)
 
     if ~record == None:
@@ -99,7 +97,7 @@ def main():
 
     xlsx_list = OStools.OStools.filesearch('.xlsx')
     for file in xlsx_list:
-        Excel_to_Pandas(dbfilename, dbpath, Data_path, feather_path,  file)
+        Excel_to_Pandas(dbfilename, dbpath, Data_path, file)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

@@ -9,6 +9,7 @@ import sys
 logger = logging.getLogger(__name__)
 
 def check_for_path(path):
+    logger.info('Started Function')
     if ~os.path.isdir(path):
         try:
             os.mkdir(path)
@@ -33,6 +34,7 @@ def filesearch(word=""):
     return file
 
 def Change_Working_Path(path):
+    logger.info('Started Function')
     # Check if New path exists
     #if os.path.exists(path):
         # Change the current working Directory
@@ -47,6 +49,7 @@ def Change_Working_Path(path):
 
 def Check_for_file_date(filename, date=DT.datetime.today().date()):
     """"""
+    logger.info('Started Function')
     timestamp = DT.datetime.fromtimestamp(Path(filename).stat().st_mtime)
     if date != timestamp.date():
         root = tk.Tk()

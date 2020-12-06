@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-import os_tools
+import OStools.OStools
 
 def create_connection(db_file, dbpath):
     """ create a database connection to the SQLite database
@@ -18,8 +18,8 @@ def create_connection(db_file, dbpath):
     ) [WITHOUT ROWID];
     '''
 
-    if os_tools.check_for_path(dbpath):
-        os_tools.Change_Working_Path(dbpath)
+    if OStools.OStools.check_for_path(dbpath):
+        OStools.OStools.Change_Working_Path(dbpath)
 
     conn = None
     try:
@@ -90,7 +90,7 @@ def select_file_by_checksum(conn, checksum):
 
     rows = cur.fetchall()
 
-        return rows
+    return rows
 
 def delete_file(conn, id):
     """
