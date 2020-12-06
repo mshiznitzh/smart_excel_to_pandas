@@ -29,7 +29,7 @@ def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
     df.to_feather(filename)
 
-def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None, date=None, sheet=None):
+def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, sheetname=None):
     """
     returns tuple
      """
@@ -41,10 +41,10 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, CheckforUpdate=None
     feather_path = '../Feather/'
     dbconn = create_connection(dbfilename, dbpath)
 
-    OStools.Change_Working_Path(Data_path)
+    OStools.OStools.Change_Working_Path(Data_path)
 
     if CheckforUpdate == True:
-        Check_for_file_date(filename, date)
+        OStools.OStools.Check_for_file_date(filename, date)
 
     if os.path.exists(filename):
         checksum = md5(filename)
@@ -89,21 +89,17 @@ def feather_me():
 
 def main():
     logger.info('Started Function')
-    OStools.OStools.Change_Working_Path('../Data')
-    #get all xlsx files in folder
+
+    dbfilename = 'check_sum_database.db'
+    dbpath = '../Excel_to_Pandas_database'
+    Data_path = '../Data'
+    feather_path = '../Feather/'
+
+    OStools.OStools.Change_Working_Path(Data_path)
+
     xlsx_list = OStools.OStools.filesearch('.xlsx')
-
-
-    #Time how long it takes to import all sheets
-    t = timeit.Timer("read_excel_all()", "from main import read_excel_all")
-    print(t.timeit(1))
-
-    feather_me()
-    t = timeit.Timer("read_feather_all()", "from main import read_feather_all")
-    print(t.timeit(1))
-
-    #export to feather
-    # Time how long it takes to import all sheets via feather
+    for file in xlsx_list:
+        Excel_to_Pandas(dbfilename, dbpath, Data_path, feather_path,  file)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
