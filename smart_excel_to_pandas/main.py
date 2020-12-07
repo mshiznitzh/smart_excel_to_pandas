@@ -29,7 +29,7 @@ def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
     df.to_feather(filename)
 
-def Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet=None):
+def Smart_Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet=None):
     """
     returns tuple
      """
@@ -81,7 +81,7 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet
         dbconn.close()
 
 
-    return filename, df, sheet
+    return (filename, df, sheet)
 
 def read_excel_all():
     logger.info('Started Function')

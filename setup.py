@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="smart_excel_to_pandas", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="Mike Howard",
     author_email="mshiznitzh@gmail.com",
     description="Takes a list of excel sheet then converts then to a dataframe saving them as a feather format to be used later",
