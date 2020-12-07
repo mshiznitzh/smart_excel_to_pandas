@@ -18,7 +18,6 @@ __version__ = "0.1.0"
 __license__ = "MIT"
 
 import logging
-import os.path
 import Hashtools.md5
 import OStools.OStools
 import PandasTools.PandasTools
@@ -47,13 +46,14 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet
     checksum = Hashtools.md5.md5(filename)
     record = SQLtools.sqlite.select_file_by_checksum(dbconn, checksum)
 
-    if len(record) == 1:
-        filename = filename_to_feather(filename)
-
-        try:
-            df = pd.read_feather(str.join(feather_path, filename), columns=None, use_threads=True)
-        except:
-            logger.error("Error importing file " + filename, exc_info=True)
+    if len(record) >> 0:
+        df = {}
+        for item in record:
+            try:
+                df.update({item[3]: pd.read_feather(feather_path + item[3] + '_' + PandasTools.PandasTools.filename_to_feather(filename)
+                , columns=None, use_threads=True)})
+            except:
+                logger.error("Error importing file " + filename, exc_info=True)
     else:
         try:
             df = pd.read_excel(filename, sheet_name=sheet)
@@ -63,14 +63,18 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet
         if isinstance(df, dict):
             for x in df:
                 df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
-                SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
-                df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
+                df_f = pd.read_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
+                if df[x].reset_index().equals(df_f):
+                    SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
+                #df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
+                else:
+                    logger.info('Feather copy not equal to excel, not adding to database')
 
         else:
             df.reset_index().to_feather(
                 feather_path + '_' + PandasTools.PandasTools.filename_to_feather(filename))
             create_file_data(conn, filename, checksum)
-            df = PandasTools.PandasTools.Cleanup_Dataframe(df)
+            #df = PandasTools.PandasTools.Cleanup_Dataframe(df)
 
 
     if dbconn:
