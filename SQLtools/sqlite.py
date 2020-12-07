@@ -26,8 +26,8 @@ def create_connection(db_file, dbpath):
     '''
 
     oldpath = os.getcwd()
-    if  OStools.OStools.check_for_path(dbpath):
-        OStools.OStools.Change_Working_Path(dbpath)
+    OStools.OStools.check_for_path(dbpath)
+    OStools.OStools.Change_Working_Path(dbpath)
 
     conn = None
     try:
