@@ -4,6 +4,9 @@ import logging
 import datetime as DT
 import tkinter as tk
 
+#Setup Logging for Module
+logger = logging.getLogger(__name__)
+
 def Excel_to_Pandas(filename,check_update=False):
     logger.info('importing file ' + filename)
     df=[]
@@ -25,8 +28,7 @@ def Excel_to_Pandas(filename,check_update=False):
     return df
 
 def Cleanup_Dataframe(df):
-    logger.info('Starting Cleanup_Dataframe')
-    logger.debug(df.info(verbose=True))
+    logger.info('Started Function')
     # Remove whitespace on both ends of column headers
     df.columns = df.columns.str.strip()
 
@@ -37,6 +39,7 @@ def Cleanup_Dataframe(df):
 
 def filename_to_feather(filename):
     # TODO add the rest of the supported excel formats
+    logger.info('Started Function')
     filename = filename.replace('.xlsx', '.feather')
     filename = filename.replace('.xlsm', '.feather')
     return filename

@@ -30,25 +30,24 @@ def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
     df.to_feather(filename)
 
-def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, sheetname=None):
+def Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet=None):
     """
     returns tuple
      """
     logger.info('importing file ' + filename)
 
-    dbfilename = 'check_sum_database.db'
-    dbpath = './Excel_to_Pandas_database'
-    Data_path = '../Data'
-    feather_path = '../Feather/'
+    OStools.OStools.check_for_path(feather_path)
+
+
     dbconn = SQLtools.sqlite.create_connection(dbfilename, dbpath)
 
-    OStools.OStools.Change_Working_Path(Data_path)
+    #OStools.OStools.Change_Working_Path(Data_path)
 
-    if os.path.exists(filename):
-        checksum = Hashtools.md5.md5(filename)
-        record = select_file_by_checksum(dbconn, checksum)
+    #if os.path.exists(filename):
+    checksum = Hashtools.md5.md5(filename)
+    record = SQLtools.sqlite.select_file_by_checksum(dbconn, checksum)
 
-    if ~record == None:
+    if len(record) == 1:
         filename = filename_to_feather(filename)
 
         try:
@@ -58,14 +57,25 @@ def Excel_to_Pandas(dbfilename, dbpath ,Data_path ,filename, sheetname=None):
     else:
         try:
             df = pd.read_excel(filename, sheet_name=sheet)
-            df.to_feather(str.join(feather_path, filename_to_feather(filename),'_',sheet))
-
         except:
             logger.error("Error importing file " + filename, exc_info=True)
 
+        if isinstance(df, dict):
+            for x in df:
+                df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
+                SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
+                df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
+
+        else:
+            df.reset_index().to_feather(
+                feather_path + '_' + PandasTools.PandasTools.filename_to_feather(filename))
+            create_file_data(conn, filename, checksum)
+            df = PandasTools.PandasTools.Cleanup_Dataframe(df)
+
+
     if dbconn:
         dbconn.close()
-    df = PandasTools.Cleanup_Dataframe(df)
+
 
     return filename, df, sheet
 
@@ -89,15 +99,15 @@ def main():
     logger.info('Started Function')
 
     dbfilename = 'check_sum_database.db'
-    dbpath = '../Excel_to_Pandas_database'
+    dbpath = './Excel_to_Pandas_database'
     Data_path = '../Data'
-    feather_path = '../Feather/'
+    feather_path = './Feather/'
 
     OStools.OStools.Change_Working_Path(Data_path)
 
     xlsx_list = OStools.OStools.filesearch('.xlsx')
     for file in xlsx_list:
-        Excel_to_Pandas(dbfilename, dbpath, Data_path, file)
+        Excel_to_Pandas(dbfilename, dbpath, Data_path, feather_path, file)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
