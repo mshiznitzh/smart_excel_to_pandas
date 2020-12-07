@@ -61,10 +61,10 @@ def create_file_data(conn, filename, checksum, sheet=None):
     :param project:
     :return: project id
     """
-    sql = ''' INSERT INTO Files(filename, checksum, sheet)
-              VALUES(filename=?, checksum=?, sheet=?) '''
+    sql = ''' INSERT INTO Files(filename, checksum)
+              VALUES(?, ?) '''
     cur = conn.cursor()
-    cur.execute(sql, (filename, checksum, sheet,))
+    cur.execute(sql, (filename, checksum,))
     conn.commit()
     return cur.lastrowid
 
