@@ -1,1 +1,1 @@
-from main import Smart_Excel_to_Pandas
+__all__ = ['Smart_Excel_to_Pandas']
