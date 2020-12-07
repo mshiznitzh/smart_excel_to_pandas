@@ -111,7 +111,7 @@ def main():
 
     xlsx_list = OStools.OStools.filesearch('.xlsx')
     for file in xlsx_list:
-        Excel_to_Pandas(dbfilename, dbpath, Data_path, feather_path, file)
+        Smart_Excel_to_Pandas(dbfilename, dbpath, Data_path, feather_path, file)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
