@@ -72,11 +72,13 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
 
                     if df[x].reset_index().equals(df_f):
                         SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
+                    else:
+                        logger.info('Feather copy not equal to excel, not adding to database')
+
                 except:
                     print(filename + 'Imports with an error' )
                 #df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
-                else:
-                    logger.info('Feather copy not equal to excel, not adding to database')
+
 
         else:
             df.reset_index().to_feather(
