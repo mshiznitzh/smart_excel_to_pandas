@@ -49,7 +49,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
     record = SQLtools.sqlite.select_file_by_checksum(dbconn, checksum)
 
     if len(record) >> 0:
-        if isinstance(df, int):
+        if isinstance(sheet, int):
             df = pd.read_feather(feather_path + PandasTools.PandasTools.filename_to_feather(filename))
         else:
             for item in record:
