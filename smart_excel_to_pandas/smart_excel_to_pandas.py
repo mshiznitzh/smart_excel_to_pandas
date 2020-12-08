@@ -24,6 +24,8 @@ import PandasTools.PandasTools
 import pandas as pd
 import SQLtools.sqlite
 
+#Setup Logging for Module
+logger = logging.getLogger(__name__)
 
 def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
