@@ -31,7 +31,7 @@ def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
     df.to_feather(filename)
 
-def Smart_Excel_to_Pandas(filename, sheet=None, dbfilename = 'check_sum_database.db', dbpath = './Excel_to_Pandas_database' ,Data_path = '../Data', feather_path = './Feather/'):
+def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.db', dbpath = './Excel_to_Pandas_database' ,Data_path = '../Data', feather_path = './Feather/'):
     """
     returns tuple
      """
@@ -81,7 +81,7 @@ def Smart_Excel_to_Pandas(filename, sheet=None, dbfilename = 'check_sum_database
         else:
             df.reset_index().to_feather(
                 feather_path + '_' + PandasTools.PandasTools.filename_to_feather(filename))
-            create_file_data(conn, filename, checksum)
+            SQLtools.sqlite.create_file_data(conn, filename, checksum)
             #df = PandasTools.PandasTools.Cleanup_Dataframe(df)
 
 
