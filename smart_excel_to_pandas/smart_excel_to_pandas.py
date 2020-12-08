@@ -89,7 +89,7 @@ def Smart_Excel_to_Pandas(filename, sheet=None, dbfilename = 'check_sum_database
         dbconn.close()
 
 
-    return (filename, df, sheet)
+    return (filename, df)
 
 def read_excel_all():
     logger.info('Started Function')
