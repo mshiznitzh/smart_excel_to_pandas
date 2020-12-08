@@ -64,10 +64,8 @@ def Smart_Excel_to_Pandas(filename, sheet=None, dbfilename = 'check_sum_database
 
         if isinstance(df, dict):
             for x in df:
-                try:
-                    df[x].columns = df[x].columns.astype(str)
-                    df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
-                except:
+                df[x].columns = df[x].columns.astype(str)
+                df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
 
                 df_f = pd.read_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
 
