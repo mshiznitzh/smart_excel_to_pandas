@@ -29,7 +29,7 @@ def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
     df.to_feather(filename)
 
-def Smart_Excel_to_Pandas(dbfilename, dbpath ,Data_path, feather_path, filename, sheet=None):
+def Smart_Excel_to_Pandas(filename, sheet=None, dbfilename = 'check_sum_database.db', dbpath = '../Data' ,Data_path = '../Data', feather_path = './Feather/'):
     """
     returns tuple
      """
@@ -111,7 +111,7 @@ def main():
 
     xlsx_list = OStools.OStools.filesearch('.xlsx')
     for file in xlsx_list:
-        Smart_Excel_to_Pandas(dbfilename, dbpath, Data_path, feather_path, file)
+        Smart_Excel_to_Pandas(filed, None,bfilename, dbpath, Data_path, feather_path)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
