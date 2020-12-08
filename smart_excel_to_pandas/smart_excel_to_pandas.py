@@ -50,7 +50,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
 
     if len(record) >> 0:
         if isinstance(df, int):
-            df = pd.read_feather(feather_path + PandasTools.PandasTools.filename_to_feather(filename)
+            df = pd.read_feather(feather_path + PandasTools.PandasTools.filename_to_feather(filename))
         else:
             for item in record:
                 try:
