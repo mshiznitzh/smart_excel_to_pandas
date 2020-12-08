@@ -49,13 +49,15 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
     record = SQLtools.sqlite.select_file_by_checksum(dbconn, checksum)
 
     if len(record) >> 0:
-
-        for item in record:
-            try:
-                df.update({item[3]: pd.read_feather(feather_path + item[3] + '_' + PandasTools.PandasTools.filename_to_feather(filename)
-                , columns=None, use_threads=True)})
-            except:
-                logger.error("Error importing file " + filename, exc_info=True)
+        if isinstance(df, int):
+            df = pd.read_feather(feather_path + PandasTools.PandasTools.filename_to_feather(filename)
+        else:
+            for item in record:
+                try:
+                    df.update({item[3]: pd.read_feather(feather_path + item[3] + '_' + PandasTools.PandasTools.filename_to_feather(filename)
+                    , columns=None, use_threads=True)})
+                except:
+                    logger.error("Error importing file " + filename, exc_info=True)
     else:
         try:
             df = pd.read_excel(filename, sheet_name=sheet)
