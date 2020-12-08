@@ -64,13 +64,16 @@ def Smart_Excel_to_Pandas(filename, sheet=None, dbfilename = 'check_sum_database
 
         if isinstance(df, dict):
             for x in df:
-                df[x].columns = df[x].columns.astype(str)
-                df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
+                try:
+                    df[x].columns = df[x].columns.astype(str)
+                    df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
 
-                df_f = pd.read_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
+                    df_f = pd.read_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
 
-                if df[x].reset_index().equals(df_f):
-                    SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
+                    if df[x].reset_index().equals(df_f):
+                        SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
+                except:
+                    print(filename + 'Imports with an error' )
                 #df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
                 else:
                     logger.info('Feather copy not equal to excel, not adding to database')
