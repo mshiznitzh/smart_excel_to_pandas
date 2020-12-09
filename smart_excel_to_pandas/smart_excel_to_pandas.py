@@ -51,11 +51,13 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
     if len(record) >> 0:
         if isinstance(sheet, int):
             df = pd.read_feather(feather_path + PandasTools.PandasTools.filename_to_feather(filename))
+            df = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df)
         else:
             for item in record:
                 try:
                     df.update({item[3]: pd.read_feather(feather_path + item[3] + '_' + PandasTools.PandasTools.filename_to_feather(filename)
                     , columns=None, use_threads=True)})
+                    df[x] = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df[x])
                 except:
                     logger.error("Error importing file " + filename, exc_info=True)
     else:
@@ -134,7 +136,7 @@ def main():
 
     xlsx_list = OStools.OStools.filesearch('.xlsx')
     for file in xlsx_list:
-        Smart_Excel_to_Pandas(filed, None,bfilename, dbpath, Data_path, feather_path)
+        Smart_Excel_to_Pandas(file, None,bfilename, dbpath, Data_path, feather_path)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
