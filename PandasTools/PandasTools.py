@@ -4,7 +4,8 @@ import logging
 import datetime as DT
 import tkinter as tk
 
-
+#Setup Logging for Module
+logger = logging.getLogger(__name__)
 
 def Excel_to_Pandas(filename,check_update=False):
     logger.info('importing file ' + filename)
@@ -28,6 +29,7 @@ def Excel_to_Pandas(filename,check_update=False):
 
 def Cleanup_Column_Headers_Dataframe(df):
     logger.info('Started Function')
+    print('Cleanup_Column_Headers_Dataframe started')
     # Remove whitespace on both ends of column headers
     df.columns = df.columns.str.strip()
 
