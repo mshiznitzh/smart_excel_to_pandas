@@ -1,12 +1,13 @@
 '''This module is home to Mike Howard's tools that use the os module'''
 import os.path
 import datetime as DT
-import logging
+
 import glob
 import sys
-
+import logging
 #Setup Logging for Module
 logger = logging.getLogger(__name__)
+
 
 def check_for_path(path):
     logger.info('Started Function')
@@ -56,15 +57,3 @@ def Check_for_file_date(filename, date=DT.datetime.today().date()):
         root.withdraw()
         filename = filedialog.askopenfilename(title=' '.join(['Select file for', filename]))
     return filename
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

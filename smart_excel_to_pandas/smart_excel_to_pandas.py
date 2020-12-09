@@ -19,13 +19,15 @@ __license__ = "MIT"
 
 import logging
 import Hashtools.md5
-import OStools.OStools
-import PandasTools.PandasTools
 import pandas as pd
-import SQLtools.sqlite
 
 #Setup Logging for Module
 logger = logging.getLogger(__name__)
+
+
+import OStools.OStools
+import PandasTools.PandasTools
+import SQLtools.sqlite
 
 def Convert_df_to_feather(df , filename):
     filename = PandasTools.PandasTools.filename_to_feather("./"+filename)
@@ -58,7 +60,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                 try:
                     df.update({item[3]: pd.read_feather(feather_path + item[3] + '_' + PandasTools.PandasTools.filename_to_feather(filename)
                     , columns=None, use_threads=True)})
-                    df[x] = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df[x])
+                    #df[item] = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df[item])
                 except:
                     logger.error("Error importing file " + filename, exc_info=True)
     else:
@@ -137,13 +139,13 @@ def main():
 
     xlsx_list = OStools.OStools.filesearch('.xlsx')
     for file in xlsx_list:
-        Smart_Excel_to_Pandas(file, None,bfilename, dbpath, Data_path, feather_path)
+        Smart_Excel_to_Pandas(file, None, dbfilename, dbpath, Data_path, feather_path)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
     # Setup Logging
-    logger = logging.getLogger('root')
-    FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
+    logger = logging.getLogger()
+    FORMAT = "%(levelname)s [%(name)s - %(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
     logging.basicConfig(format=FORMAT)
     logger.setLevel(logging.INFO)
 
