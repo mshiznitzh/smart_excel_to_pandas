@@ -40,18 +40,8 @@ def Cleanup_Column_Headers_Dataframe(df):
 
 def filename_to_feather(filename):
     # TODO add the rest of the supported excel formats
-    logger.info('Started Function')
+    logger.info('Started Function with filename: ' + filename)
     filename = filename.replace('.xlsx', '.feather')
     filename = filename.replace('.xlsm', '.feather')
+    logger.info('Function returning filename: ' + filename)
     return filename
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
