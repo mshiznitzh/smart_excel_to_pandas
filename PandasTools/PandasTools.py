@@ -4,8 +4,7 @@ import logging
 import datetime as DT
 import tkinter as tk
 
-#Setup Logging for Module
-logger = logging.getLogger(__name__)
+
 
 def Excel_to_Pandas(filename,check_update=False):
     logger.info('importing file ' + filename)
