@@ -71,7 +71,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                     df[x].reset_index().to_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
 
                     df_f = pd.read_feather(feather_path + str(x) + '_' + PandasTools.PandasTools.filename_to_feather(filename))
-
+                    df[x] = Cleanup_Column_Headers_Dataframe(df[x])
                     if df[x].reset_index().equals(df_f):
                         SQLtools.sqlite.create_file_data(dbconn, filename, checksum, x)
                     else:
@@ -90,7 +90,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
 
                 df_f = pd.read_feather(
                     feather_path + PandasTools.PandasTools.filename_to_feather(filename))
-
+                df = Cleanup_Column_Headers_Dataframe(df)
                 if df.reset_index().equals(df_f):
                     SQLtools.sqlite.create_file_data(dbconn, filename, checksum, '0')
                 else:

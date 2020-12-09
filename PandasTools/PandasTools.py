@@ -27,7 +27,7 @@ def Excel_to_Pandas(filename,check_update=False):
     logger.debug(df.info(verbose=True))
     return df
 
-def Cleanup_Dataframe(df):
+def Cleanup_Column_Headers_Dataframe(df):
     logger.info('Started Function')
     # Remove whitespace on both ends of column headers
     df.columns = df.columns.str.strip()
