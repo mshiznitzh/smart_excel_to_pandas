@@ -65,7 +65,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                     logger.error("Error importing file " + filename, exc_info=True)
     else:
         try:
-            df = pd.read_excel(filename, sheet_name=sheet).convert_dtypes()
+            df = pd.read_excel(filename, sheet_name=sheet)
         except:
             logger.error("Error importing file " + filename, exc_info=True)
 
