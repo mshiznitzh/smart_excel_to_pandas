@@ -83,7 +83,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                         logger.info('Feather copy not equal to excel, not adding to database')
 
                 except:
-                    print(filename + 'Imports with an error' )
+                    logger.error(filename + 'Imports with an error', exc_info=True)
                 #df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
 
                 df[x] = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df[x])
@@ -102,7 +102,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                     logger.info('Feather copy not equal to excel, not adding to database')
 
             except:
-                print(filename + 'Imports with an error')
+                logger.error(filename + 'Imports with an error', exc_info=True)
 
             df = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df)
     if dbconn:
