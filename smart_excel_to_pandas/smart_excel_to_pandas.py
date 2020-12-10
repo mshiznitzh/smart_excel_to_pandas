@@ -65,7 +65,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                     logger.error("Error importing file " + filename, exc_info=True)
     else:
         try:
-            df = pd.read_excel(filename, sheet_name=sheet)
+            df = pd.read_excel(filename, sheet_name=sheet).convert_dtypes()
         except:
             logger.error("Error importing file " + filename, exc_info=True)
 
@@ -83,15 +83,17 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                         logger.info('Feather copy not equal to excel, not adding to database')
 
                 except:
-                    logger.error(filename + 'Imports with an error', exc_info=True)
+                    logger.error(filename + ' Imports with an error', exc_info=True)
                 #df[x] = PandasTools.PandasTools.Cleanup_Dataframe(df[x])
 
                 df[x] = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df[x])
         else:
-            try:
+
                 df.columns = df.columns.astype(str)
+            try:
                 df.reset_index().to_feather(
                     feather_path + PandasTools.PandasTools.filename_to_feather(filename))
+
 
                 df_f = pd.read_feather(
                     feather_path + PandasTools.PandasTools.filename_to_feather(filename))
@@ -102,7 +104,7 @@ def Smart_Excel_to_Pandas(filename, sheet = 0, dbfilename = 'check_sum_database.
                     logger.info('Feather copy not equal to excel, not adding to database')
 
             except:
-                logger.error(filename + 'Imports with an error', exc_info=True)
+                logger.error(filename + 'Exports with an error', exc_info=True)
 
             df = PandasTools.PandasTools.Cleanup_Column_Headers_Dataframe(df)
     if dbconn:
